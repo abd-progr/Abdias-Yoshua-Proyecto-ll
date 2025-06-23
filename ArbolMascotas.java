@@ -16,15 +16,13 @@ public class ArbolMascotas{
         if(actual == null){
             return new NodoABB(mascota);
         }
-        if( actual.getMascota().getId() < mascota.getId()){
-
-            actual.setDerecha(agregarRecursivo(actual.getDerecha(), mascota));
-
-        }
-        if( actual.getMascota().getId() < mascota.getId()){
-
+        if(mascota.getId() < actual.getMascota().getId()){
             actual.setIzquierda(agregarRecursivo(actual.getIzquierda(), mascota));
-
+        } else if(mascota.getId() > actual.getMascota().getId()){
+            actual.setDerecha(agregarRecursivo(actual.getDerecha(), mascota));
+        } else {
+            // Si el ID ya existe, no se agrega
+            return actual;
         }
         return actual;
 
@@ -94,9 +92,9 @@ public class ArbolMascotas{
     }
     private NodoABB buscarRecursivo(NodoABB nodo, int identificador){
 
-        if(nodo.getMascota().getId() == identificador) return nodo;
-
         if(nodo == null) return null;
+
+        if(nodo.getMascota().getId() == identificador) return nodo;
 
         if(nodo.getMascota().getId() > identificador){
             nodo.setIzquierda(buscarRecursivo(nodo.getIzquierda(), identificador));
@@ -111,6 +109,24 @@ public class ArbolMascotas{
         recorridoEnOrdenRecursivo(raiz);
 
     }
+    
+
+    public String listadoMascotasOrdenado() {
+    StringBuilder sb = new StringBuilder();
+    listadoRecursivo(raiz, sb);
+    return sb.toString();
+}
+
+    private void listadoRecursivo(NodoABB nodo, StringBuilder sb) {
+        if (nodo != null) {
+            listadoRecursivo(nodo.getIzquierda(), sb);
+            sb.append("ID: ").append(nodo.getMascota().getId())
+            .append(", Tipo: ").append(nodo.getMascota().getTipo()).append("\n");
+            listadoRecursivo(nodo.getDerecha(), sb);
+        }
+    }
+
+
     public void recorridoEnOrdenRecursivo(NodoABB nodo) {
 
         if (nodo != null && nodo.getMascota() != null) {

@@ -3,11 +3,11 @@ import java.io.*;
 // La clase Veterinaria  la cola y el árbol de mascotas
 public class Veterinaria {
     private ListaEnlazada colaEspera;   
-    private ABB mascotas;                // árbol binario que implementa tu compañero
+    private ArbolMascotas mascotas;                // árbol binario que implementa tu compañero
     private static final String ARCHIVO_COLA = "colaEspera.txt";
 
     // Constructor: recibe el ABB 
-    public Veterinaria(ABB arbolMascotas) {
+    public Veterinaria(ArbolMascotas arbolMascotas) {
         this.colaEspera = new ListaEnlazada();
         this.mascotas = arbolMascotas;
         cargarCola(); 
@@ -16,11 +16,11 @@ public class Veterinaria {
     // 1) Registrar llegada de una mascota
     public void registrarLlegada(String tipo, int id) {
         // Busca en el árbol si ya existe
-        Mascota m = mascotas.buscar(id);
+        Mascota m = mascotas.buscarMascota(id);
         if (m == null) {
             //  Si no existe, crea  la mascota y la inserta en el árbol
             m = new Mascota(tipo, id);
-            mascotas.insertar(m);
+            mascotas.agregarMascota(m);
         }
         //  La agrega a la cola de espera
         colaEspera.agregar(m);
@@ -47,7 +47,7 @@ public class Veterinaria {
     private void guardarCola() {
         try (PrintWriter pw = new PrintWriter(new FileWriter(ARCHIVO_COLA))) {
             // Recorre nodos de la lista y escrib "id,tipo" por línea
-            NodoLista actual = getCabezaDeLista();  // usar getter o paquete
+            NodoLista actual = colaEspera.getCabeza();  // usar getter 
             while (actual != null) {
                 Mascota m = actual.getMascota();
                 pw.println(m.getId() + "," + m.getTipo());
@@ -66,7 +66,7 @@ public class Veterinaria {
             return;  // si no existe el archivo, arranca con cola vacía
         }
       
-        try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(ARCHIVO_COLA))) {
             String linea;
             while ((linea = br.readLine()) != null) {
                 String[] partes = linea.split(",");
@@ -75,10 +75,10 @@ public class Veterinaria {
                 int id = Integer.parseInt(partes[0]);
                 String tipo = partes[1];
 
-                Mascota m = mascotas.buscar(id);
+                Mascota m = mascotas.buscarMascota(id);
                 if (m == null) {
                     m = new Mascota(tipo, id);
-                    mascotas.insertar(m);
+                    mascotas.agregarMascota(m);
                 }
                 colaEspera.agregar(m);
             }

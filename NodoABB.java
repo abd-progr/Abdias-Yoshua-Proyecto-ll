@@ -12,10 +12,10 @@ public class NodoABB{
     }
 
     
-    public void setDato(Mascota mascota){
+    public void setMascota(Mascota mascota){
         this.mascota = mascota;
     }
-    public int getMascota(){
+    public Mascota getMascota(){
         return this.mascota;
     }
     public void setDerecha(NodoABB derecha){

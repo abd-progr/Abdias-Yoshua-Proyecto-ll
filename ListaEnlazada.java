@@ -62,6 +62,9 @@ public class ListaEnlazada {
     public int getTamaño() {
         return tamaño;
     }
+    public NodoLista getCabeza() {
+    return cabeza;
+}
     // Guarda la lista en un archivo línea por línea
     public void guardarEnArchivo(PrintWriter pw) {
         NodoLista actual = cabeza;
