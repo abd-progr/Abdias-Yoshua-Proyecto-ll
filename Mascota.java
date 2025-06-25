@@ -1,5 +1,5 @@
 public class Mascota {
-    private static final int RANGO_MAX = 10000;
+    private static final int RANGO_MAX = 100;
     private static int[] idsGenerados = new int[RANGO_MAX]; // 0 si libre, 1 si usado
 
     private int id;

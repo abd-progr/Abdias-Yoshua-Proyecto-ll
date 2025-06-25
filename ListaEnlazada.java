@@ -48,6 +48,30 @@ public class ListaEnlazada {
     public NodoLista getCabeza() {
         return cabeza;
     }
+     public boolean eliminarPorId(int id) {
+        if (cabeza == null) {
+            return false;
+        }
+
+        if (cabeza.getMascota().getId() == id) {
+            cabeza = cabeza.getSiguiente();
+            tamaño--;
+            return true;
+        }
+
+        NodoLista actual = cabeza;
+        while (actual.getSiguiente() != null) {
+            if (actual.getSiguiente().getMascota().getId() == id) {
+                actual.setSiguiente(actual.getSiguiente().getSiguiente());
+                tamaño--;
+                return true;
+            }
+            actual = actual.getSiguiente();
+        }
+
+        return false;
+    }
+
     //Recorre la lista y construye una cadena con IDs y tipos de mascotas.
     @Override
     public String toString() {
@@ -63,4 +87,5 @@ public class ListaEnlazada {
         sb.append("null");
         return sb.toString();
     }
+
 }

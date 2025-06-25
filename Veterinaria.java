@@ -21,6 +21,7 @@ public class Veterinaria {
         guardarCola();
     }
 
+    // Método para atender a la siguiente mascota en la cola
     public Mascota atender() {
         Mascota m = cola.sacar();
         guardarCola();
@@ -31,6 +32,19 @@ public class Veterinaria {
         return cola.toString();
     }
 
+    // Método para eliminar mascota por id
+    public boolean eliminarMascotaPorId(int id) {
+        boolean eliminadoDelArbol = arbol.eliminar(id);
+        if (!eliminadoDelArbol) {
+            return false; // No estaba en el árbol
+        }
+        // También eliminar de la cola de espera
+        cola.eliminarPorId(id);
+        guardarCola();
+        return true;
+    }
+
+    // Método para guardar la cola en un archivo
     private void guardarCola() {
         try (PrintWriter pw = new PrintWriter(new FileWriter(ARCHIVO_COLA))) {
             NodoLista actual = cola.getCabeza();
@@ -65,7 +79,7 @@ public class Veterinaria {
             System.err.println("Error cargando cola: " + e.getMessage());
         }
     }
-
+// Método para ver las mascotas ordenadas por ID
     public String verMascotasOrdenadas() {
         return arbol.recorridoInOrden();
     }
@@ -73,7 +87,10 @@ public class Veterinaria {
     public boolean eliminarPorId(int id) {
         return arbol.eliminar(id);
     }
+    
 
+
+    
     public Mascota buscarPorNombre(String nombre) {
         return arbol.buscarPorNombre(nombre);
     }

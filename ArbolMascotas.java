@@ -3,7 +3,8 @@ public class ArbolMascotas {
 
     public void agregarMascota(Mascota m) {
         raiz = agregarRecursivo(raiz, m);
-    }
+            }
+        
 
     // Método auxiliar para agregar una mascota al árbol
     private NodoABB agregarRecursivo(NodoABB actual, Mascota m) {
@@ -67,11 +68,14 @@ public class ArbolMascotas {
         }
         return nodo;
     }
-
     //  encontrar el nodo con el valor mínimo 
+    private Mascota encontrarMinimo(NodoABB nodo) {
+        while (nodo.getIzquierda() != null) {
             nodo = nodo.getIzquierda();
+        }
         return nodo.getMascota();
     }
+    
 
     public String recorridoInOrden() {
         StringBuilder sb = new StringBuilder();
