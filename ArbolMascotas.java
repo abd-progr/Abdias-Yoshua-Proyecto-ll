@@ -1,143 +1,90 @@
-public class ArbolMascotas{
-
+public class ArbolMascotas {
     private NodoABB raiz;
 
-    public ArbolMascotas(Mascota mascota){
-        this.raiz = new NodoABB( mascota);
-    }
-    
-    public void agregarMascota(Mascota mascota){
-        
-        raiz = agregarRecursivo(this.raiz, mascota);
+    public void agregarMascota(Mascota m) {
+        raiz = agregarRecursivo(raiz, m);
     }
 
-    private NodoABB agregarRecursivo(NodoABB actual, Mascota mascota){
-
-        if(actual == null){
-            return new NodoABB(mascota);
-        }
-        if(mascota.getId() < actual.getMascota().getId()){
-            actual.setIzquierda(agregarRecursivo(actual.getIzquierda(), mascota));
-        } else if(mascota.getId() > actual.getMascota().getId()){
-            actual.setDerecha(agregarRecursivo(actual.getDerecha(), mascota));
-        } else {
-            // Si el ID ya existe, no se agrega
-            return actual;
-        }
+    // Método auxiliar para agregar una mascota al árbol
+    private NodoABB agregarRecursivo(NodoABB actual, Mascota m) {
+        if (actual == null) return new NodoABB(m);
+        if (m.getId() < actual.getMascota().getId())
+            actual.setIzquierda(agregarRecursivo(actual.getIzquierda(), m));
+        else if (m.getId() > actual.getMascota().getId())
+            actual.setDerecha(agregarRecursivo(actual.getDerecha(), m));
         return actual;
-
     }
 
-    public boolean eliminarMascota(int identificador){
-
-        NodoABB nodoEliminar = buscarRecursivo(this.raiz, identificador);
-        if (nodoEliminar == null) return false;
-        
-        raiz = eliminarRecursivo(identificador, this.raiz);
-        return true;
-
+    public Mascota buscarPorId(int id) {
+        NodoABB nodo = buscarRecursivo(raiz, id);
+        return nodo == null ? null : nodo.getMascota();
     }
-    private NodoABB eliminarRecursivo(int identificador, NodoABB nodo){
 
-        if(nodo == null){
-            return null;
-        }
-        if(nodo.getMascota().getId() > identificador) {
-            nodo.setIzquierda(eliminarRecursivo(identificador, nodo.getIzquierda()));
-        }
-        if(nodo.getMascota().getId() < identificador) {
-            nodo.setDerecha(eliminarRecursivo(identificador, nodo.getDerecha()));
-        }
-
-        if(nodo.getMascota().getId() == identificador){
-            //caso sin hijos
-            if(nodo.getDerecha() == null && nodo.getIzquierda() == null){
-                return null;
-
-            }
-            // caso un hijo
-            if(nodo.getDerecha() == null){
-                return nodo.getIzquierda();
-            }
-            if(nodo.getIzquierda() == null){
-                return nodo.getDerecha();
-            }
-
-            //caso 2hijos
-            Mascota mascotaMin = encontrarMinimo(nodo.getDerecha());
-            nodo.setMascota(mascotaMin);
-            nodo.setDerecha(eliminarRecursivo(mascotaMin.getId(), nodo.getDerecha()));
-            return nodo;
-        }
-        return nodo;
+    //  buscar un nodo por id
+    private NodoABB buscarRecursivo(NodoABB nodo, int id) {
+        if (nodo == null) return null;
+        if (id == nodo.getMascota().getId()) return nodo;
+        if (id < nodo.getMascota().getId())
+            return buscarRecursivo(nodo.getIzquierda(), id);
+        else
+            return buscarRecursivo(nodo.getDerecha(), id);
     }
-    private Mascota encontrarMinimo(NodoABB nodo){
 
-        if (nodo.getIzquierda() == null) {
+    public Mascota buscarPorNombre(String nombre) {
+        return buscarNombreRecursivo(raiz, nombre);
+    }
+
+    //  buscar una mascota por nombre
+    private Mascota buscarNombreRecursivo(NodoABB nodo, String nombre) {
+        if (nodo == null) return null;
+        if (nodo.getMascota().getNombre().equalsIgnoreCase(nombre))
             return nodo.getMascota();
-        } else {        
-            return encontrarMinimo(nodo.getIzquierda());
-        }
+        Mascota izq = buscarNombreRecursivo(nodo.getIzquierda(), nombre);
+        if (izq != null) return izq;
+        return buscarNombreRecursivo(nodo.getDerecha(), nombre);
     }
 
-    public Mascota buscarMascota(int identificador){
-
-        raiz = buscarRecursivo(this.raiz, identificador);
-        if(raiz == null) {
-            return null;
-        } else{
-        return raiz.getMascota();
-        }
-
+    public boolean eliminar(int id) {
+        if (buscarPorId(id) == null) return false;
+        raiz = eliminarRecursivo(raiz, id);
+        return true;
     }
-    private NodoABB buscarRecursivo(NodoABB nodo, int identificador){
 
-        if(nodo == null) return null;
+    private NodoABB eliminarRecursivo(NodoABB nodo, int id) {
+        if (nodo == null) return null;
 
-        if(nodo.getMascota().getId() == identificador) return nodo;
+        if (id < nodo.getMascota().getId())
+            nodo.setIzquierda(eliminarRecursivo(nodo.getIzquierda(), id));
+        else if (id > nodo.getMascota().getId())
+            nodo.setDerecha(eliminarRecursivo(nodo.getDerecha(), id));
+        else {
+            if (nodo.getIzquierda() == null) return nodo.getDerecha();
+            if (nodo.getDerecha() == null) return nodo.getIzquierda();
 
-        if(nodo.getMascota().getId() > identificador){
-            nodo.setIzquierda(buscarRecursivo(nodo.getIzquierda(), identificador));
-        } else{
-            nodo.setDerecha(buscarRecursivo(nodo.getDerecha(), identificador));
+            Mascota menor = encontrarMinimo(nodo.getDerecha());
+            nodo.setMascota(menor);
+            nodo.setDerecha(eliminarRecursivo(nodo.getDerecha(), menor.getId()));
         }
         return nodo;
-
     }
-    public void recorridoEnOrden(){
 
-        recorridoEnOrdenRecursivo(raiz);
-
+    //  encontrar el nodo con el valor mínimo 
+            nodo = nodo.getIzquierda();
+        return nodo.getMascota();
     }
-    
 
-    public String listadoMascotasOrdenado() {
-    StringBuilder sb = new StringBuilder();
-    listadoRecursivo(raiz, sb);
-    return sb.toString();
-}
+    public String recorridoInOrden() {
+        StringBuilder sb = new StringBuilder();
+        inOrdenRecursivo(raiz, sb);
+        return sb.toString();
+    }
 
-    private void listadoRecursivo(NodoABB nodo, StringBuilder sb) {
+    // ecorrer el árbol en orden
+    private void inOrdenRecursivo(NodoABB nodo, StringBuilder sb) {
         if (nodo != null) {
-            listadoRecursivo(nodo.getIzquierda(), sb);
-            sb.append("ID: ").append(nodo.getMascota().getId())
-            .append(", Tipo: ").append(nodo.getMascota().getTipo()).append("\n");
-            listadoRecursivo(nodo.getDerecha(), sb);
+            inOrdenRecursivo(nodo.getIzquierda(), sb);
+            sb.append(nodo.getMascota()).append("\n");
+            inOrdenRecursivo(nodo.getDerecha(), sb);
         }
     }
-
-
-    public void recorridoEnOrdenRecursivo(NodoABB nodo) {
-
-        if (nodo != null && nodo.getMascota() != null) {
-            NodoABB nodoIzquierdo = nodo.getIzquierda();
-            NodoABB nodoDerecho = nodo.getDerecha();
-        
-            recorridoEnOrdenRecursivo(nodoIzquierdo);
-            System.out.println("ID: " + nodo.getMascota().getId() + 
-                            ", Tipo: " + nodo.getMascota().getTipo());
-            recorridoEnOrdenRecursivo(nodoDerecho);
-        }
-    }
-
 }

@@ -1,89 +1,80 @@
 import java.io.*;
 
-// La clase Veterinaria  la cola y el árbol de mascotas
 public class Veterinaria {
-    private ListaEnlazada colaEspera;   
-    private ArbolMascotas mascotas;                // árbol binario que implementa tu compañero
-    private static final String ARCHIVO_COLA = "colaEspera.txt";
+    private ListaEnlazada cola;
+    private ArbolMascotas arbol;
+    private static final String ARCHIVO_COLA = "cola.txt";
 
-    // Constructor: recibe el ABB 
-    public Veterinaria(ArbolMascotas arbolMascotas) {
-        this.colaEspera = new ListaEnlazada();
-        this.mascotas = arbolMascotas;
-        cargarCola(); 
+    public Veterinaria(ArbolMascotas a) {
+        this.arbol = a;
+        this.cola = new ListaEnlazada();
+        cargarCola();
     }
 
-    // 1) Registrar llegada de una mascota
-    public void registrarLlegada(String tipo, int id) {
-        // Busca en el árbol si ya existe
-        Mascota m = mascotas.buscarMascota(id);
+    public void registrar(String nombre, String tipo) {
+        Mascota m = arbol.buscarPorNombre(nombre);
         if (m == null) {
-            //  Si no existe, crea  la mascota y la inserta en el árbol
-            m = new Mascota(tipo, id);
-            mascotas.agregarMascota(m);
+            m = new Mascota(nombre, tipo);
+            arbol.agregarMascota(m);
         }
-        //  La agrega a la cola de espera
-        colaEspera.agregar(m);
-        //  Guarda el estado de la cola en el archivo
+        cola.agregar(m);
         guardarCola();
     }
 
-    // 2) Atender a la siguiente mascota en la cola
-    public Mascota atenderSiguiente() {
-        if (colaEspera.estaVacia()) {
-            return null; // no hay nadie en espera
-        }
-        Mascota m = colaEspera.sacar();
-        guardarCola();  // actualizo el archivo tras atender
+    public Mascota atender() {
+        Mascota m = cola.sacar();
+        guardarCola();
         return m;
     }
 
-    // 3) Mostrar la cola actual como texto
     public String verCola() {
-        return colaEspera.toString();
+        return cola.toString();
     }
 
-    // Persistencia; guardar la cola en archivo
     private void guardarCola() {
         try (PrintWriter pw = new PrintWriter(new FileWriter(ARCHIVO_COLA))) {
-            // Recorre nodos de la lista y escrib "id,tipo" por línea
-            NodoLista actual = colaEspera.getCabeza();  // usar getter 
+            NodoLista actual = cola.getCabeza();
             while (actual != null) {
                 Mascota m = actual.getMascota();
-                pw.println(m.getId() + "," + m.getTipo());
+                pw.println(m.getNombre() + "," + m.getTipo() + "," + m.getId());
                 actual = actual.getSiguiente();
             }
         } catch (IOException e) {
-            // No detener la app, solo avisa por consola
             System.err.println("Error guardando cola: " + e.getMessage());
         }
     }
 
-    // Persistencia; cargar la cola desde archivo 
     private void cargarCola() {
         File f = new File(ARCHIVO_COLA);
-        if (!f.exists()) {
-            return;  // si no existe el archivo, arranca con cola vacía
-        }
-      
-        try (BufferedReader br = new BufferedReader(new FileReader(ARCHIVO_COLA))) {
+        if (!f.exists()) return;
+        try (BufferedReader br = new BufferedReader(new FileReader(f))) {
             String linea;
             while ((linea = br.readLine()) != null) {
                 String[] partes = linea.split(",");
-                if (partes.length != 2) continue;
+                if (partes.length == 3) {
+                    String nombre = partes[0];
+                    String tipo = partes[1];
+                    int id = Integer.parseInt(partes[2]);
 
-                int id = Integer.parseInt(partes[0]);
-                String tipo = partes[1];
-
-                Mascota m = mascotas.buscarMascota(id);
-                if (m == null) {
-                    m = new Mascota(tipo, id);
-                    mascotas.agregarMascota(m);
+                    Mascota m = new Mascota(nombre, tipo, id);
+                    arbol.agregarMascota(m);
+                    cola.agregar(m);
                 }
-                colaEspera.agregar(m);
             }
-        } catch (IOException | NumberFormatException e) {
+        } catch (IOException e) {
             System.err.println("Error cargando cola: " + e.getMessage());
         }
+    }
+
+    public String verMascotasOrdenadas() {
+        return arbol.recorridoInOrden();
+    }
+
+    public boolean eliminarPorId(int id) {
+        return arbol.eliminar(id);
+    }
+
+    public Mascota buscarPorNombre(String nombre) {
+        return arbol.buscarPorNombre(nombre);
     }
 }
