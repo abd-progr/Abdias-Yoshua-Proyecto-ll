@@ -77,18 +77,18 @@ public class ArbolMascotas {
     }
     
 
-    public String recorridoInOrden() {
+    public String recorridoEnOrden() {
         StringBuilder sb = new StringBuilder();
-        inOrdenRecursivo(raiz, sb);
+        enOrdenRecursivo(raiz, sb);
         return sb.toString();
     }
 
     // ecorrer el árbol en orden
-    private void inOrdenRecursivo(NodoABB nodo, StringBuilder sb) {
+    private void enOrdenRecursivo(NodoABB nodo, StringBuilder sb) {
         if (nodo != null) {
-            inOrdenRecursivo(nodo.getIzquierda(), sb);
+            enOrdenRecursivo(nodo.getIzquierda(), sb);
             sb.append(nodo.getMascota()).append("\n");
-            inOrdenRecursivo(nodo.getDerecha(), sb);
+            enOrdenRecursivo(nodo.getDerecha(), sb);
         }
     }
 }

@@ -81,7 +81,7 @@ public class Veterinaria {
     }
 // Método para ver las mascotas ordenadas por ID
     public String verMascotasOrdenadas() {
-        return arbol.recorridoInOrden();
+        return arbol.recorridoEnOrden();
     }
 
     public boolean eliminarPorId(int id) {

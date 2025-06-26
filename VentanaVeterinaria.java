@@ -51,7 +51,7 @@ public class VentanaVeterinaria extends JFrame {
         btnEliminar.setBounds(220, 60, 100, 30);
         add(btnEliminar);
 
-        // --- Área de texto para cola y árbol ---
+        // --- area de texto para cola y árbol ---
         areaCola = new JTextArea();
         areaCola.setBounds(20, 110, 300, 380);
         areaCola.setEditable(false);

@@ -3,11 +3,11 @@
 public class ListaEnlazada {
     // Referencia al primer nodo de la lista
     private NodoLista cabeza;
-    private int tamaño;
+    private int tamano;
 
     public ListaEnlazada() {
         cabeza = null;
-        tamaño = 0;
+        tamano = 0;
     }
 
     // Agrega una mascota al final de la lista (FIFO).
@@ -26,7 +26,7 @@ public class ListaEnlazada {
             // Enlazamos el nuevo al final
             actual.setSiguiente(nuevo);
         }
-        tamaño++;
+        tamano++;
     }
 
     // Saca y devuelve la mascota al frente de la lista.
@@ -37,7 +37,7 @@ public class ListaEnlazada {
         Mascota m = cabeza.getMascota();
         // Avanzamos la cabeza al siguiente nodo
         cabeza = cabeza.getSiguiente();
-        tamaño--;
+        tamano--;
         return m;
     }
 
@@ -55,7 +55,7 @@ public class ListaEnlazada {
 
         if (cabeza.getMascota().getId() == id) {
             cabeza = cabeza.getSiguiente();
-            tamaño--;
+            tamano--;
             return true;
         }
 
@@ -63,7 +63,7 @@ public class ListaEnlazada {
         while (actual.getSiguiente() != null) {
             if (actual.getSiguiente().getMascota().getId() == id) {
                 actual.setSiguiente(actual.getSiguiente().getSiguiente());
-                tamaño--;
+                tamano--;
                 return true;
             }
             actual = actual.getSiguiente();
