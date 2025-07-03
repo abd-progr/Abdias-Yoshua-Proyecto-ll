@@ -1,5 +1,8 @@
 import java.io.*;
-
+/**
+ * @brief Clase principal que gestiona una veterinaria con sistema de cola y registro de mascotas.
+ * 
+ */
 public class Veterinaria {
     private ListaEnlazada cola;
     private ArbolMascotas arbol;
@@ -10,7 +13,15 @@ public class Veterinaria {
         this.cola = new ListaEnlazada();
         cargarCola();
     }
-
+/**
+ * @brief Registra una nueva mascota en el sistema y la añade a la cola de atención.
+ * 
+ * @param nombre Nombre de la mascota (no puede ser null o vacío).
+ * @param tipo Tipo de mascota.
+ * @post Si la mascota no existía, se crea y registra en el árbol.
+ * @post La mascota se añade al final de la cola de atención.
+ * @post Actualiza automáticamente el archivo.
+ */
     public void registrar(String nombre, String tipo) {
         Mascota m = arbol.buscarPorNombre(nombre);
         if (m == null) {
@@ -21,30 +32,50 @@ public class Veterinaria {
         guardarCola();
     }
 
-    // Método para atender a la siguiente mascota en la cola
+/**
+ * @brief Atiende a la siguiente mascota en la cola (FIFO).
+ * 
+ * @return Mascota La mascota atendida, o null si la cola está vacía.
+ * @post Elimina la mascota de la cola de atención.
+ * @post Actualiza automáticamente el archivo.
+ */   
     public Mascota atender() {
         Mascota m = cola.sacar();
         guardarCola();
         return m;
     }
-
+/**
+ * @brief  una representación visual de la cola actual.
+ */
     public String verCola() {
         return cola.toString();
     }
-
-    // Método para eliminar mascota por id
+/** 
+ * @brief Elimina una mascota tanto del árbol como de la cola de atención usando su ID.
+ * 
+ * @param id ID de la mascota a eliminar.
+ * @return boolean true si se eliminó correctamente, false si no se encontró la mascota.
+ * 
+ * @post Si la mascota existía:
+ *   - Se elimina del árbol binario
+ *   - Se remueve de la cola de atención (si estaba presente)
+ *   - Se actualiza el archivo
+ */  
     public boolean eliminarMascotaPorId(int id) {
         boolean eliminadoDelArbol = arbol.eliminar(id);
         if (!eliminadoDelArbol) {
-            return false; // No estaba en el árbol
+            return false; 
         }
-        // También eliminar de la cola de espera
+       
         cola.eliminarPorId(id);
         guardarCola();
         return true;
     }
 
-    // Método para guardar la cola en un archivo
+  /**
+ * @brief Guarda el estado actual de la cola en el archivo.
+ * @note Maneja automáticamente errores de IO mostrándolos por consola.
+ */   
     private void guardarCola() {
         try (PrintWriter pw = new PrintWriter(new FileWriter(ARCHIVO_COLA))) {
             NodoLista actual = cola.getCabeza();
@@ -58,6 +89,12 @@ public class Veterinaria {
         }
     }
 
+/**
+ * @brief Carga la cola de atención desde el archivo de persistencia.
+ * @post Si el archivo existe y es válido:
+ *   - Crea las mascotas y las registra en el árbol
+ *   - Reconstruye la cola de atención en orden FIFO
+ */
     private void cargarCola() {
         File f = new File(ARCHIVO_COLA);
         if (!f.exists()) return;
@@ -79,18 +116,24 @@ public class Veterinaria {
             System.err.println("Error cargando cola: " + e.getMessage());
         }
     }
-// Método para ver las mascotas ordenadas por ID
+/**
+ * @brief Genera un listado ordenado por ID de todas las mascotas registradas.
+ */
     public String verMascotasOrdenadas() {
         return arbol.recorridoEnOrden();
     }
-
+/**
+ * @brief Elimina una mascota del sistema mediante su ID.
+* @return boolean true si la mascota existía y fue eliminada, false si no se encontró.
+ */
     public boolean eliminarPorId(int id) {
         return arbol.eliminar(id);
     }
     
-
-
-    
+/**
+ * @brief Busca una mascota por su nombre (comparación insensible a mayúsculas).
+ * @return Mascota La mascota encontrada o null si no existe.
+ */ 
     public Mascota buscarPorNombre(String nombre) {
         return arbol.buscarPorNombre(nombre);
     }

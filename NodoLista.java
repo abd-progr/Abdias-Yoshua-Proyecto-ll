@@ -1,9 +1,11 @@
-// Nodo de lista enlazada, simple para la cola de espera
+/**
+ * @brief Nodo para una lista enlazada que almacena un objeto `Mascota`.
+ */
 public class NodoLista {
     private Mascota mascota;
     private NodoLista siguiente;
 
-    // Constructor: recibe la mascota, al principio no tiene siguiente
+    
     public NodoLista(Mascota m) {
         this.mascota = m;
         this.siguiente = null;

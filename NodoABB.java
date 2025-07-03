@@ -1,3 +1,6 @@
+/**
+ * @brief Nodo de un Árbol Binario de Búsqueda (ABB) que almacena una Mascota.
+ */
 public class NodoABB{
 
     private NodoABB derecha;

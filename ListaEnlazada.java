@@ -1,7 +1,8 @@
-
-// Lista enlazada simple para representar la cola de espera
+/**
+ * @brief Implementación de una lista enlazada simple para almacenar mascotas.
+*/
 public class ListaEnlazada {
-    // Referencia al primer nodo de la lista
+    
     private NodoLista cabeza;
     private int tamano;
 
@@ -10,37 +11,55 @@ public class ListaEnlazada {
         tamano = 0;
     }
 
-    // Agrega una mascota al final de la lista (FIFO).
+/**
+ * @brief Agrega una nueva mascota al final de la lista enlazada.
+ * 
+ * @param m La mascota a agregar (no puede ser null).
+ * @post El tamaño de la lista aumenta en 1.
+ * @post Si la lista estaba vacía, la nueva mascota se convierte en la cabeza.
+ * @post Si no estaba vacía, se añade al final manteniendo los elementos existentes.
+ */
      
     public void agregar(Mascota m) {
         NodoLista nuevo = new NodoLista(m);
         if (cabeza == null) {
-            // Lista vacía: el nuevo nodo es la cabeza
+            
             cabeza = nuevo;
         } else {
-            // Recorre hasta el último nodo
+            
             NodoLista actual = cabeza;
             while (actual.getSiguiente() != null) {
                 actual = actual.getSiguiente();
             }
-            // Enlazamos el nuevo al final
+            
             actual.setSiguiente(nuevo);
         }
         tamano++;
     }
-
-    // Saca y devuelve la mascota al frente de la lista.
+/**
+ * @brief Elimina y devuelve la mascota al inicio de la lista (operación FIFO).
+ * 
+ * @return Mascota La mascota que estaba en la cabeza, o null si la lista estaba vacía.
+ * @post Si había elementos, el tamaño disminuye en 1.
+ * @post La nueva cabeza es el siguiente nodo (o null si era el único elemento).
+ */
+   
     public Mascota sacar() {
         if (cabeza == null) {
             return null;
         }
         Mascota m = cabeza.getMascota();
-        // Avanzamos la cabeza al siguiente nodo
+        
         cabeza = cabeza.getSiguiente();
         tamano--;
         return m;
     }
 
+/**
+ * @brief Verifica si la lista no contiene elementos.
+ * 
+ * @return true si la lista está vacía (cabeza == null), false en caso contrario.
+ */
     public boolean estaVacia() {
         return cabeza == null;
     }
@@ -48,7 +67,17 @@ public class ListaEnlazada {
     public NodoLista getCabeza() {
         return cabeza;
     }
-     public boolean eliminarPorId(int id) {
+/**
+ * @brief Elimina la primera mascota con el ID especificado de la lista enlazada.
+ * 
+ * @param id ID de la mascota a eliminar.
+ * @return boolean true si se encontró y eliminó la mascota, false si no existía.
+ * 
+ * @post Si la mascota estaba en la cabeza, actualiza la referencia cabeza.
+ * @post Si la mascota estaba en medio, re-enlaza los nodos adyacentes.
+ * @post El tamaño de la lista disminuye en 1 si se eliminó un elemento.
+ */
+    public boolean eliminarPorId(int id) {
         if (cabeza == null) {
             return false;
         }
@@ -71,8 +100,11 @@ public class ListaEnlazada {
 
         return false;
     }
-
-    //Recorre la lista y construye una cadena con IDs y tipos de mascotas.
+/**
+ * @brief Genera una representación en String de toda la lista enlazada.
+ * 
+ * @return String Cadena con el formato: "[ID=x, Tipo=y] -> [ID=z, Tipo=w] -> null"
+ */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

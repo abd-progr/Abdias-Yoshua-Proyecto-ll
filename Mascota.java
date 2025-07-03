@@ -1,3 +1,7 @@
+/**
+ * @brief Clase que representa una mascota con identificador único, tipo y nombre.
+ */
+
 public class Mascota {
     private static final int RANGO_MAX = 100;
     private static int[] idsGenerados = new int[RANGO_MAX]; // 0 si libre, 1 si usado
@@ -20,7 +24,14 @@ public class Mascota {
             idsGenerados[id] = 1;
         }
     }
-
+    /**
+ * @brief Genera un ID único aleatorio dentro del rango predefinido (0 a RANGO_MAX - 1).
+ * 
+ * El método evita colisiones marcando los IDs ya utilizados en el array estático `idsGenerados`.
+ * Utiliza un bucle do-while para garantizar que el ID generado no esté en uso.
+ *
+ * @return int ID único generado (entre 0 y RANGO_MAX - 1).
+ */
     private int generarIdUnico() {
         int nuevoId;
         do {

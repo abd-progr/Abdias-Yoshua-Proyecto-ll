@@ -1,6 +1,14 @@
 import javax.swing.*;
 import java.awt.event.*;
-
+/**
+ * @brief Clase que representa la interfaz gráfica del sistema de veterinaria.
+ * 
+ * Proporciona una interfaz de usuario para interactuar con el sistema:
+ * - Registro de nuevas mascotas
+ * - Visualización de cola de atención
+ * - Visualización de mascotas registradas
+ * - Operaciones de búsqueda y eliminación
+ */
 public class VentanaVeterinaria extends JFrame {
     private Veterinaria vet;
     private JTextField campoNombre, campoTipo, campoEliminarId;
@@ -12,11 +20,16 @@ public class VentanaVeterinaria extends JFrame {
         setLayout(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        // Inicializamos el modelo
+/** 
+ * @brief Inicializamos el modelo.
+ * 
+ */
         ArbolMascotas arbol = new ArbolMascotas();
         vet = new Veterinaria(arbol);
 
-        // --- Campos de registro ---
+        /** 
+ * @brief --- Campos de registro ---
+ */
         JLabel lblNombre = new JLabel("Nombre:");
         lblNombre.setBounds(20, 20, 60, 25);
         add(lblNombre);
@@ -35,12 +48,16 @@ public class VentanaVeterinaria extends JFrame {
         btnRegistrar.setBounds(470, 20, 120, 30);
         add(btnRegistrar);
 
-        // --- Botón atender ---
+     /** 
+ * @brief --- Botón atender ---
+ */
         JButton btnAtender = new JButton("Atender");
         btnAtender.setBounds(470, 60, 120, 30);
         add(btnAtender);
 
-        // --- Campo y botón para eliminar por ID ---
+     /** 
+ * @brief --- Campo y botón para eliminar por ID ---
+ */
         JLabel lblEliminar = new JLabel("Eliminar ID:");
         lblEliminar.setBounds(20, 60, 80, 25);
         add(lblEliminar);
@@ -51,7 +68,9 @@ public class VentanaVeterinaria extends JFrame {
         btnEliminar.setBounds(220, 60, 100, 30);
         add(btnEliminar);
 
-        // --- area de texto para cola y árbol ---
+        /** 
+ * @brief --- area de texto para cola y árbol ---
+ */
         areaCola = new JTextArea();
         areaCola.setBounds(20, 110, 300, 380);
         areaCola.setEditable(false);
@@ -62,7 +81,9 @@ public class VentanaVeterinaria extends JFrame {
         areaArbol.setEditable(false);
         add(areaArbol);
 
-        // --- Listeners ---
+        /** 
+ * @brief --- Listeners ---
+ */
         btnRegistrar.addActionListener(e -> {
             String nombre = campoNombre.getText().trim();
             String tipo    = campoTipo.getText().trim();
@@ -107,7 +128,9 @@ public class VentanaVeterinaria extends JFrame {
             actualizar();
         });
 
-        // Inicializamos las vistas
+        /** 
+ * @brief Inicializamos las vistas
+ */
         actualizar();
         setVisible(true);
     }
