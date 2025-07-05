@@ -72,12 +72,12 @@ public class VentanaVeterinaria extends JFrame {
  * @brief --- area de texto para cola y árbol ---
  */
         areaCola = new JTextArea();
-        areaCola.setBounds(20, 110, 300, 380);
+        areaCola.setBounds(20, 150, 300, 380);
         areaCola.setEditable(false);
         add(areaCola);
 
         areaArbol = new JTextArea();
-        areaArbol.setBounds(340, 110, 280, 380);
+        areaArbol.setBounds(340, 150, 280, 380);
         areaArbol.setEditable(false);
         add(areaArbol);
 
@@ -126,6 +126,41 @@ public class VentanaVeterinaria extends JFrame {
             }
             campoEliminarId.setText("");
             actualizar();
+        });
+/** 
+         * @brief --- Botón buscar por nombre ---
+         */
+        JPanel panelBuscar = new JPanel(null);
+        panelBuscar.setBounds(340, 100, 280, 60);
+        panelBuscar.setBorder(BorderFactory.createTitledBorder("Buscar mascota por nombre"));
+
+        JLabel lblBuscar = new JLabel("Nombre:");
+        lblBuscar.setBounds(10, 20, 70, 25);
+        panelBuscar.add(lblBuscar);
+
+        JTextField campoBuscarNombre = new JTextField();
+        campoBuscarNombre.setBounds(80, 20, 100, 30);
+        panelBuscar.add(campoBuscarNombre);
+
+        JButton btnBuscar = new JButton("Buscar");
+        btnBuscar.setBounds(190, 18, 80, 35);
+        panelBuscar.add(btnBuscar);
+
+        add(panelBuscar);
+
+        btnBuscar.addActionListener(e -> {
+            String nombre = campoBuscarNombre.getText().trim();
+            if (nombre.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Ingresa un nombre para buscar.");
+                return;
+            }
+            Mascota m = vet.buscarPorNombre(nombre);
+            if (m != null) {
+                JOptionPane.showMessageDialog(this, "Mascota encontrada:\n" + m);
+            } else {
+                JOptionPane.showMessageDialog(this, "No se encontró mascota con ese nombre.");
+            }
+            campoBuscarNombre.setText("");
         });
 
         /** 
