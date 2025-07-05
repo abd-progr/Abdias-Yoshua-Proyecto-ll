@@ -35,13 +35,30 @@ Este proyecto simula una clínica veterinaria con una interfaz gráfica desarrol
 
 ---
 
-## 🚀 Instrucciones de uso
+## 🚀 Instrucciones
 
 ### 🛠️ Requisitos
-- **Java JDK 8 o superior**
-- Editor o IDE: terminal
+- Java JDK 8 o superior**.
+- Cualquier IDE (por ejemplo, IntelliJ, Eclipse, NetBeans) o terminal/síntesis de comandos.
 
-### 🧪 Compilación desde terminal (si no usás un IDE)
-```bash
-javac *.java
-java VentanaVeterinaria
+### 🧪 Compilación y Ejecución
+
+#### Uso del terminal (ejemplo de Windows)
+1. Abra un prompt de comandos en la carpeta del proyecto.
+2. Compile todos los archivos Java:
+   ```bash
+ javac *.java
+ ```
+3. Ejecuta la aplicación: ```bash java VentanaVeterinaria ```
+
+#### Usando un IDE
+1. Abra la carpeta del proyecto en tu IDE predilecta.
+2. Revise  que todos los archivos `.java` están en el mismo paquete o directorio.
+3. Localice y ejecute la clase `VentanaVeterinaria` (contiene el método `main`).
+
+### 🖱️ Cómo usar la aplicación
+- **Registrar una mascota:** Introduzca el nombre y tipo de la mascota, y toque "Registrar".
+- **Atender a la siguiente mascota:** Haga clic en "Atender" para atender a la siguiente mascota de la cola.
+- **Eliminar una mascota:** Introduzca el ID de la mascota y haga clic en "Eliminar" para eliminarla del sistema.
+- El panel izquierdo muestra la cola de espera actual; el panel derecho muestra todas las mascotas registradas en orden.
+- Todos los datos se guardan automáticamente cuando se realizan cambios.
